@@ -18,7 +18,7 @@ export const loginUser = ({ email, password }) => {
     dispatch({
       type: 'LOAD_SPINNER'
     });
-    fetch('https://trafixsoft.com/token', {
+    fetch('http://localhost:3000/token', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
