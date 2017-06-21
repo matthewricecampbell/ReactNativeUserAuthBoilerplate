@@ -18,7 +18,7 @@ export const loginUser = ({ email, password }) => {
     dispatch({
       type: 'LOAD_SPINNER'
     });
-    fetch('http://localhost:3000/token', {
+    fetch('http://localhost:3000/authenticate', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -28,8 +28,6 @@ export const loginUser = ({ email, password }) => {
           user: {
             email,
             password,
-            // email: 'sankalpsingha',
-            // password: 'sankalp123!@#'
           }
         })
       }).then((response) => {

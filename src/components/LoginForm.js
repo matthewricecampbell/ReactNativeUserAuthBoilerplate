@@ -13,8 +13,7 @@ class LoginForm extends Component {
     this.props.loginUser({ email, password });
   }
   emailChanged(value) {
-    const email = _.lowerCase(value.trim());
-    this.props.emailChanged(email);
+    this.props.emailChanged(value.trim());
   }
   passwordChanged(value) {
     // console.log('Value:', value);
