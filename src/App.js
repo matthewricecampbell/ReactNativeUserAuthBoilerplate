@@ -1,42 +1,73 @@
 import React, { Component } from 'react';
 import { View, Button, Text } from 'react-native';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { default as thunk } from "redux-thunk";
 import { logger } from 'redux-logger';
-import { Provider } from 'react-redux';
-import Reducers from './reducers/';
-import LoginForm from './components/LoginForm';
-import { StackNavigator } from 'react-navigation';
+import { Provider, connect } from 'react-redux';
+import AuthReducer from './reducers/AuthReducer';
+import { StackNavigator, addNavigationHelpers, NavigationActions, TabNavigator } from 'react-navigation';
 
-class LoginScreen extends Component {
-    render() {
-      const { navigate } = this.props.navigation;
-      return (
-        <Provider store={createStore(Reducers, {}, applyMiddleware(thunk))}>
-          <View>
-            <LoginForm />
-          </View>
-        </Provider>
-      );
-    }
-}
+import HomeScreen from './components/HomeScreen'
+import LoginScreen from './components/LoginScreen'
 
-class HomeScreen extends Component {
-  static navigationOptions = {
-    title: 'Home',
-  };
-  render() {
-    return (
-      <View>
-        <Text>Home</Text>
-      </View>
+
+const AppNavigator = StackNavigator({
+      Login: {
+        screen: LoginScreen
+      },
+      Home: {
+        screen: HomeScreen
+      }
+  });
+
+
+const initialNavState = AppNavigator.router.getStateForAction(NavigationActions.navigate({routeName: 'Login'}))
+
+const NavReducer = (state = initialNavState, action) => {
+  console.log("State: ", state, action)
+  const newState = AppNavigator.router.getStateForAction(action, state);
+  return newState || state;
+};
+
+// connect(state => ({
+//     nav: state.nav
+// }))
+
+const mapStateToProps = (state) => ({
+  nav: state.nav
+});
+
+const store = createStore(combineReducers({auth: AuthReducer, nav: NavReducer}), {}, applyMiddleware(thunk))
+
+class AppNav extends Component {
+  render () {
+
+    return(
+      <AppNavigator
+        navigation={addNavigationHelpers({
+                    dispatch: store.dispatch,
+                    state: this.props.nav
+                })}
+      />
     );
   }
 }
 
-const Moodboard = StackNavigator({
-    Login: { screen: LoginScreen },
-    Home: { screen: HomeScreen },
-});
+const AppWithNavigationState = connect(mapStateToProps)(AppNav);
 
-export default Moodboard;
+export default function Moodboard() {
+    console.log("HEY", store.getState())
+  return(
+    <Provider store={store}>
+      <AppWithNavigationState />
+    </Provider>
+  )
+}
+
+
+// const Moodboard = StackNavigator({
+//     Login: { screen: LoginScreen },
+//     Home: { screen: HomeScreen },
+// });
+
+// export default Moodboard;

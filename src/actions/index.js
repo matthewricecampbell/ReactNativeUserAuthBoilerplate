@@ -1,4 +1,7 @@
 /*global fetch:false*/
+
+import { NavigationActions } from 'react-navigation'
+
 export const emailChanged = (email) => {
   return {
     type: 'EMAIL_CHANGED',
@@ -45,6 +48,7 @@ export const loginUser = ({ email, password }) => {
               type: 'LOGIN_USER_SUCCESS',
               payload: data
             });
+            dispatch({type: 'Navigation/NAVIGATE', routeName: 'Home'})
           });
         }
       });

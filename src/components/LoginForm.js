@@ -4,6 +4,7 @@ import { Hoshi } from 'react-native-textinput-effects';
 import Button from 'react-native-button';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation'
 import { emailChanged, passwordChanged, loginUser } from '../actions/';
 
 class LoginForm extends Component {
@@ -109,4 +110,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginForm);
+export default connect(mapStateToProps, {emailChanged, passwordChanged, loginUser})(LoginForm);
